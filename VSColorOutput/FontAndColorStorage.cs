@@ -19,16 +19,16 @@ namespace BlueOnionSoftware
 
         private static readonly Dictionary<string, ColorableItemInfo[]> _colorMap = new Dictionary<string, ColorableItemInfo[]>
         {
-            {OutputClassificationDefinitions.BuildHead, new[] {new ColorableItemInfo()  }},
-            {OutputClassificationDefinitions.BuildText, new[] {new ColorableItemInfo()  }},
-            {OutputClassificationDefinitions.LogInfo, new[] {new ColorableItemInfo()    }},
-            {OutputClassificationDefinitions.LogWarn, new[] {new ColorableItemInfo()    }},
-            {OutputClassificationDefinitions.LogError, new[] {new ColorableItemInfo()   }},
-            {OutputClassificationDefinitions.LogCustom1, new[] {new ColorableItemInfo() }},
-            {OutputClassificationDefinitions.LogCustom2, new[] {new ColorableItemInfo() }},
-            {OutputClassificationDefinitions.LogCustom3, new[] {new ColorableItemInfo() }},
-            {OutputClassificationDefinitions.LogCustom4, new[] {new ColorableItemInfo() }},
-            {OutputClassificationDefinitions.FindResultsFilename, new[] {new ColorableItemInfo()   }},
+            {OutputClassificationDefinitions.BuildHead,             new[] {new ColorableItemInfo() }},
+            {OutputClassificationDefinitions.BuildText,             new[] {new ColorableItemInfo() }},
+            {OutputClassificationDefinitions.LogInfo,               new[] {new ColorableItemInfo() }},
+            {OutputClassificationDefinitions.LogWarn,               new[] {new ColorableItemInfo() }},
+            {OutputClassificationDefinitions.LogError,              new[] {new ColorableItemInfo() }},
+            {OutputClassificationDefinitions.LogCustom1,            new[] {new ColorableItemInfo() }},
+            {OutputClassificationDefinitions.LogCustom2,            new[] {new ColorableItemInfo() }},
+            {OutputClassificationDefinitions.LogCustom3,            new[] {new ColorableItemInfo() }},
+            {OutputClassificationDefinitions.LogCustom4,            new[] {new ColorableItemInfo() }},
+            {OutputClassificationDefinitions.FindResultsFilename,   new[] {new ColorableItemInfo() }},
             {OutputClassificationDefinitions.FindResultsSearchTerm, new[] {new ColorableItemInfo() }},
         };
 
@@ -60,6 +60,7 @@ namespace BlueOnionSoftware
                         store.GetItem(color.Key, color.Value);
                     }
                     store.CloseCategory();
+
                     store.OpenCategory(DefGuidList.guidOutputWindowFontCategory, flags);
                     foreach (var color in _colorMap)
                     {

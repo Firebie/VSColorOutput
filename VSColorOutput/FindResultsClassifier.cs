@@ -80,7 +80,8 @@ namespace BlueOnionSoftware
 
                 if (!filenamesOnly)
                 {
-                    var regex = matchWholeWord ? string.Format(@"\b{0}\b", Regex.Escape(searchTerm)) : Regex.Escape(searchTerm);
+                    //var regex = matchWholeWord ? string.Format(@"\b{0}\b", Regex.Escape(searchTerm)) : Regex.Escape(searchTerm);
+                    var regex = Regex.Escape(searchTerm);
                     var casing = matchCase ? RegexOptions.None : RegexOptions.IgnoreCase;
                     searchTextRegex = new Regex(regex, RegexOptions.None | casing);
 

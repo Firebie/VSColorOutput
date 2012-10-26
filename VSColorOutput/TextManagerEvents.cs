@@ -48,15 +48,17 @@ namespace BlueOnionSoftware
             LANGPREFERENCES[] pLangPrefs,
             FONTCOLORPREFERENCES[] pColorPrefs)
         {
-            if (pColorPrefs != null && pColorPrefs.Length > 0 && pColorPrefs[0].pColorTable != null)
+            //if (pColorPrefs != null && pColorPrefs.Length > 0 && pColorPrefs[0].pColorTable != null)
+            if (pColorPrefs != null && pColorPrefs.Length > 0)
             {
                 var guidFontCategory = (Guid)Marshal.PtrToStructure(pColorPrefs[0].pguidFontCategory, typeof(Guid));
-                var guidColorService = (Guid)Marshal.PtrToStructure(pColorPrefs[0].pguidColorService, typeof(Guid));
-                if (_guidColorService == Guid.Empty)
-                {
-                    _guidColorService = guidColorService;
-                }
-                if (guidFontCategory == DefGuidList.guidTextEditorFontCategory && _guidColorService == guidColorService)
+                //var guidColorService = (Guid)Marshal.PtrToStructure(pColorPrefs[0].pguidColorService, typeof(Guid));
+                //if (_guidColorService == Guid.Empty)
+                //{
+                //    _guidColorService = guidColorService;
+                //}
+                //if (guidFontCategory == DefGuidList.guidTextEditorFontCategory && _guidColorService == guidColorService)
+                if (guidFontCategory == DefGuidList.guidTextEditorFontCategory)
                 {
                     FontAndColorStorage.UpdateColors();
                 }
