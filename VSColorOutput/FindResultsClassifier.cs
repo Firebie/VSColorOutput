@@ -18,6 +18,7 @@ namespace BlueOnionSoftware
         private const string MatchCase = "Match case";
         private const string WholeWord = "Whole word";
         private const string ListFilenamesOnly = "List filenames only";
+        private const string FindResults = "Find Results";
 
         private readonly IClassificationTypeRegistryService classificationRegistry;
         private static readonly Regex FilenameRegex;
@@ -69,11 +70,15 @@ namespace BlueOnionSoftware
             var firstLine = span.Snapshot.GetLineFromLineNumber(0).GetText();
             if (firstLine.StartsWith(FindAll))
             {
-                var strings = (from s in firstLine.Split(',')
+                int begin = FindAll.Length;
+                int end   = firstLine.LastIndexOf("\",", firstLine.LastIndexOf(FindResults));
+
+                var strings = (from s in firstLine.Substring(end + 1).Split(',')
                                select s.Trim()).ToList();
 
                 var start = strings[0].IndexOf('"');
-                var searchTerm = strings[0].Substring(start + 1, strings[0].Length - start - 2);
+                //var searchTerm = strings[0].Substring(start + 1, strings[0].Length - start - 2);
+                var searchTerm = firstLine.Substring(begin, end - begin);
                 var matchCase = strings.Contains(MatchCase);
                 var matchWholeWord = strings.Contains(WholeWord);
                 var filenamesOnly = strings.Contains(ListFilenamesOnly);
