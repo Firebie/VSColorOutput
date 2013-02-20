@@ -63,10 +63,11 @@
     <StartAction>Program</StartAction>
     <StartProgram>$(ProgramFiles)\Microsoft Visual Studio 10.0\Common7\IDE\devenv.exe</StartProgram>
     <StartArguments>/rootsuffix Exp</StartArguments>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <NoWarn>
     </NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
+    <DeployExtension>True</DeployExtension>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
