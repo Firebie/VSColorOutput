@@ -47,8 +47,8 @@ namespace BlueOnionSoftware
 
             var text = span.GetText();
 
-            var filenameSpans = GetMatches(text, FilenameRegex, span.Start, FilenameClassificationType).ToList();
-            var searchTermSpans = GetMatches(text, searchTextRegex, span.Start, SearchTermClassificationType).ToList();
+            var filenameSpans   = GetMatches(text, FilenameRegex, span.Start, FilenameClassificationType).ToList();
+            var searchTermSpans = GetMatches(text, searchTextRegex, span.Start, SearchTermClassificationType, text.StartsWith(FindAll)).ToList();
 
             var toRemove = (from searchSpan in searchTermSpans
                             from filenameSpan in filenameSpans
@@ -96,10 +96,19 @@ namespace BlueOnionSoftware
             return false;
         }
 
-        private static IEnumerable<ClassificationSpan> GetMatches(string text, Regex regex, SnapshotPoint snapStart, IClassificationType classificationType)
+        private static IEnumerable<ClassificationSpan> GetMatches(
+          string text, Regex regex, SnapshotPoint snapStart, IClassificationType classificationType, bool onlyFirst = false)
         {
-            return from match in regex.Matches(text).Cast<Match>()
-                   select new ClassificationSpan(new SnapshotSpan(snapStart + match.Index, match.Length), classificationType);
+          var list = new List<ClassificationSpan>();
+
+          foreach (Match match in regex.Matches(text).Cast<Match>())
+          {
+            list.Add(new ClassificationSpan(new SnapshotSpan(snapStart + match.Index, match.Length), classificationType));
+            if (onlyFirst)
+              break;
+          }
+
+          return list;
         }
 
         private IClassificationType SearchTermClassificationType
