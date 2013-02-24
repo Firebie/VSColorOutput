@@ -27,7 +27,7 @@ namespace BlueOnionSoftware
 
         static FindResultsClassifier()
         {
-            FilenameRegex = new Regex(@"^\s*.:.*\(\d+\):", RegexOptions.Compiled);
+          FilenameRegex = new Regex(@"(^\s*.:.*\(\d+\):)|(^\s*.:.*)", RegexOptions.Compiled);
         }
 
         public FindResultsClassifier(IClassificationTypeRegistryService classificationRegistry)
@@ -63,9 +63,8 @@ namespace BlueOnionSoftware
         private bool CanSearch(SnapshotSpan span)
         {
             if (span.Start.Position != 0 && searchTextRegex != null)
-            {
                 return true;
-            }
+
             searchTextRegex = null;
             var firstLine = span.Snapshot.GetLineFromLineNumber(0).GetText();
             if (firstLine.StartsWith(FindAll))
@@ -79,11 +78,12 @@ namespace BlueOnionSoftware
                 var start = strings[0].IndexOf('"');
                 //var searchTerm = strings[0].Substring(start + 1, strings[0].Length - start - 2);
                 var searchTerm = firstLine.Substring(begin, end - begin);
-                var matchCase = strings.Contains(MatchCase);
+                
+                var matchCase      = strings.Contains(MatchCase);
                 var matchWholeWord = strings.Contains(WholeWord);
-                var filenamesOnly = strings.Contains(ListFilenamesOnly);
+                var filenamesOnly  = strings.Contains(ListFilenamesOnly);
 
-                if (!filenamesOnly)
+                //if (!filenamesOnly)
                 {
                     //var regex = matchWholeWord ? string.Format(@"\b{0}\b", Regex.Escape(searchTerm)) : Regex.Escape(searchTerm);
                     var regex = Regex.Escape(searchTerm);
