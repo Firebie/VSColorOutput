@@ -113,12 +113,12 @@ namespace BlueOnionSoftware
 
         private IClassificationType SearchTermClassificationType
         {
-            get { return classificationRegistry.GetClassificationType(OutputClassificationDefinitions.FindResultsSearchTerm); }
+            get { return classificationRegistry.GetClassificationType(OutputClassificationDefinitions.FindResultsSearchTerm_Proxy); }
         }
 
         private IClassificationType FilenameClassificationType
         {
-            get { return classificationRegistry.GetClassificationType(OutputClassificationDefinitions.FindResultsFilename); }
+            get { return classificationRegistry.GetClassificationType(OutputClassificationDefinitions.FindResultsFilename_Proxy); }
         }
 
         public event EventHandler<ClassificationChangedEventArgs> ClassificationChanged;

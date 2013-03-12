@@ -29,7 +29,6 @@ namespace BlueOnionSoftware
                 if (OutputClassifier == null)
                 {
                     OutputClassifier = new OutputClassifier(ClassificationRegistry, ServiceProvider);
-                    TextManagerEvents.RegisterForTextManagerEvents();
                 }
             }
             catch (Exception ex)
