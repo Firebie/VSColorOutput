@@ -37,7 +37,7 @@ namespace BlueOnionSoftware
             public BuildHeaderFormat()
             {
                 DisplayName = VsColorOut + "Build Header";
-                ForegroundColor = Colors.Lime;//Colors.Green;
+                ForegroundColor = Colors.Green;
             }
         }
 
@@ -54,7 +54,7 @@ namespace BlueOnionSoftware
             public BuildTextFormat()
             {
                 DisplayName = VsColorOut + "Build Text";
-                ForegroundColor = Colors.Silver;//Colors.Gray;
+                ForegroundColor = Colors.Gray;
             }
         }
 
@@ -88,7 +88,7 @@ namespace BlueOnionSoftware
             public LogWarningFormat()
             {
                 DisplayName = VsColorOut + "Log Warning";
-                ForegroundColor = Color.FromRgb(193, 193, 0);//Colors.Olive;
+                ForegroundColor = Colors.Olive;
             }
         }
 
@@ -105,7 +105,7 @@ namespace BlueOnionSoftware
             public LogInformationFormat()
             {
                 DisplayName = VsColorOut + "Log Information";
-                ForegroundColor = Color.FromRgb(140, 140, 255);//Colors.DarkBlue;
+                ForegroundColor = Colors.DarkBlue;
             }
         }
 
@@ -190,7 +190,7 @@ namespace BlueOnionSoftware
             public FindResultsSearchTermFormat()
             {
                 DisplayName = VsColorOut + "Find Results Search Term";
-                ForegroundColor = Colors.Magenta;//Colors.Yellow;//Color.FromRgb(255, 47, 255);//Colors.Blue;
+                ForegroundColor = Colors.Blue;
             }
         }
 
@@ -208,7 +208,7 @@ namespace BlueOnionSoftware
             public FindResultsFilenameFormat()
             {
                 DisplayName = VsColorOut + "Find Results Filename";
-                ForegroundColor = Colors.Silver;//Colors.Gray;
+                ForegroundColor = Colors.DarkGreen;//Colors.Gray;
             }
         }
     }
