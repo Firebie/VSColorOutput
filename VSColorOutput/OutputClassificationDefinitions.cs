@@ -208,7 +208,7 @@ namespace BlueOnionSoftware
             public FindResultsFilenameFormat()
             {
                 DisplayName = VsColorOut + "Find Results Filename";
-                ForegroundColor = Colors.DarkGreen;//Colors.Gray;
+                ForegroundColor = Colors.DarkGray;//Colors.Gray;
             }
         }
     }

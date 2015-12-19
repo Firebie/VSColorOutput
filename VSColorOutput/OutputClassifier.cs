@@ -81,14 +81,20 @@ namespace BlueOnionSoftware
                 var settings = new Settings();
                 settings.Load();
                 var patterns = settings.Patterns ?? new RegExClassification[0];
-                var classifiers =
-                    (from pattern in patterns
-                     let test = new Regex(pattern.RegExPattern, pattern.IgnoreCase ? RegexOptions.IgnoreCase : RegexOptions.None)
-                     select new Classifier
-                     {
-                         Type = pattern.ClassificationType.ToString(),
-                         Test = text => test.IsMatch(text)
-                     }).ToList();
+                
+                var classifiers = patterns.Select(
+                    pattern => new
+                    {
+                        pattern,
+                        test = new Regex(pattern.RegExPattern, pattern.IgnoreCase ? RegexOptions.IgnoreCase : RegexOptions.None)
+                    })
+                    .Select(pattern => new Classifier
+                    {
+                        Type = pattern.pattern.ClassificationType.ToString(),
+                        Test = text => pattern.test.IsMatch(text)
+                    })
+                    .ToList();
+
                 classifiers.Add(new Classifier
                 {
                     Type = OutputClassificationDefinitions.BuildText,

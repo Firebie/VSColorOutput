@@ -20,6 +20,8 @@ namespace BlueOnionSoftware
 
         public static void RegisterForTextManagerEvents()
         {
+            Microsoft.VisualStudio.PlatformUI.VSColorTheme.ThemeChanged += args => FontAndColorStorage.UpdateColors();
+
             var textManager = GetService();
             var container = textManager as IConnectionPointContainer;
             IConnectionPoint textManagerEventsConnection;
