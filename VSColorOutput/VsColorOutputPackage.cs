@@ -1,5 +1,4 @@
-﻿// Copyright (c) 2011 Blue Onion Software, All rights reserved
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
 
 namespace BlueOnionSoftware
@@ -9,8 +8,7 @@ namespace BlueOnionSoftware
     [PackageRegistration(UseManagedResourcesOnly = true)]
     [ProvideOptionPage(typeof(VsColorOutputOptions), VsColorOutputOptions.Category, VsColorOutputOptions.SubCategory, 1000, 1001, true)]
     [ProvideProfile(typeof(VsColorOutputOptions), VsColorOutputOptions.Category, VsColorOutputOptions.SubCategory, 1000, 1001, true)]
-    [ProvideAutoLoad("adfc4e64-0397-11d1-9f4e-00a0c911004f")] //UICONTEXT_NoSolution; always loads at startup
-    [InstalledProductRegistration("VSColorOutput", "Color output for build and debug windows - http://mike-ward.net/vscoloroutput.aspx", "1.4.8.1")]
+    [InstalledProductRegistration("VSColorOutput", "Color output for build and debug windows - http://mike-ward.net/vscoloroutput", "1.7.0")]
     public class VsColorOutputPackage : Package
     {
     }

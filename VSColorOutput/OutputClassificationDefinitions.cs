@@ -1,4 +1,3 @@
-// Copyright (c) 2011 Blue Onion Software, All rights reserved
 using System.ComponentModel.Composition;
 using System.Windows.Media;
 using Microsoft.VisualStudio.Text.Classification;
@@ -190,7 +189,8 @@ namespace BlueOnionSoftware
             public FindResultsSearchTermFormat()
             {
                 DisplayName = VsColorOut + "Find Results Search Term";
-                ForegroundColor = Colors.Blue;
+                //ForegroundColor = Colors.Blue;
+                ForegroundColor = Colors.Green;
             }
         }
 
@@ -202,7 +202,6 @@ namespace BlueOnionSoftware
         [UserVisible(true)]
         [Export(typeof(EditorFormatDefinition))]
         [ClassificationType(ClassificationTypeNames = FindResultsFilename)]
-
         public sealed class FindResultsFilenameFormat : ClassificationFormatDefinition
         {
             public FindResultsFilenameFormat()

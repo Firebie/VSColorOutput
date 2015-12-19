@@ -1,4 +1,3 @@
-// Copyright (c) 2012 Blue Onion Software, All rights reserved
 using System;
 using System.ComponentModel.Composition;
 using Microsoft.VisualStudio.Shell;
@@ -14,11 +13,9 @@ namespace BlueOnionSoftware
     [Export(typeof(IClassifierProvider))]
     public class OutputClassifierProvider : IClassifierProvider
     {
-        [Import]
-        internal IClassificationTypeRegistryService ClassificationRegistry;
+        [Import] internal IClassificationTypeRegistryService ClassificationRegistry;
 
-        [Import]
-        internal SVsServiceProvider ServiceProvider;
+        [Import] internal SVsServiceProvider ServiceProvider;
 
         public static OutputClassifier OutputClassifier { get; private set; }
 

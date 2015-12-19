@@ -1,5 +1,3 @@
-// Copyright (c) 2012 Blue Onion Software. All rights reserved.
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +19,9 @@ namespace BlueOnionSoftware
     private const string ListFilenamesOnly = "List filenames only";
     private const string FindResults = "Find Results";
 
-    private readonly IClassificationTypeRegistryService classificationRegistry;
+    private bool _settingsLoaded;
+    private bool _highlightFindResults;
+    private readonly IClassificationTypeRegistryService _classificationRegistry;
     private static readonly Regex FilenameRegex;
 
     private Regex searchTextFirstLineRegex;
@@ -34,15 +34,16 @@ namespace BlueOnionSoftware
 
     public FindResultsClassifier(IClassificationTypeRegistryService classificationRegistry)
     {
-      this.classificationRegistry = classificationRegistry;
+      _classificationRegistry = classificationRegistry;
     }
 
     public IList<ClassificationSpan> GetClassificationSpans(SnapshotSpan span)
     {
+      LoadSettings();
       var classifications = new List<ClassificationSpan>();
 
       var snapshot = span.Snapshot;
-      if (snapshot == null || snapshot.Length == 0 || !CanSearch(span))
+      if (snapshot == null || snapshot.Length == 0 || !CanSearch(span) || !_highlightFindResults)
       {
         return classifications;
       }
@@ -68,7 +69,7 @@ namespace BlueOnionSoftware
         return true;
 
       searchTextRegex = null;
-      var firstLine = span.Snapshot.GetLineFromLineNumber(0).GetText();
+        var firstLine = span.Snapshot.GetLineFromLineNumber(0).GetText();
       if (firstLine.StartsWith(FindAll))
       {
         int begin = FindAll.Length;
@@ -100,6 +101,20 @@ namespace BlueOnionSoftware
       return false;
     }
 
+    private void LoadSettings()
+    {
+        if (_settingsLoaded) return;
+        var settings = new Settings();
+        settings.Load();
+        _highlightFindResults = settings.HighlightFindResults;
+        _settingsLoaded = true;
+    }
+
+    public void ClearSettings()
+    {
+        _settingsLoaded = false;
+    }
+
     private static IEnumerable<ClassificationSpan> GetMatches(
       string text, Regex regex, SnapshotPoint snapStart, IClassificationType classificationType, bool onlyFirst = false)
     {
@@ -115,15 +130,9 @@ namespace BlueOnionSoftware
       return list;
     }
 
-    private IClassificationType SearchTermClassificationType
-    {
-      get { return classificationRegistry.GetClassificationType(OutputClassificationDefinitions.FindResultsSearchTerm); }
-    }
+    private IClassificationType SearchTermClassificationType => _classificationRegistry.GetClassificationType(OutputClassificationDefinitions.FindResultsSearchTerm);
 
-    private IClassificationType FilenameClassificationType
-    {
-      get { return classificationRegistry.GetClassificationType(OutputClassificationDefinitions.FindResultsFilename); }
-    }
+    private IClassificationType FilenameClassificationType => _classificationRegistry.GetClassificationType(OutputClassificationDefinitions.FindResultsFilename);
 
     public event EventHandler<ClassificationChangedEventArgs> ClassificationChanged;
   }

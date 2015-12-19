@@ -1,5 +1,4 @@
-﻿// Copyright (c) 2012 Blue Onion Software, All rights reserved
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
 
@@ -41,6 +40,11 @@ namespace BlueOnionSoftware
         [Description("Shows the debug window when the debug session starts")]
         public bool ShowDebugWindowOnDebug { get; set; }
 
+        [Category(ActionSubCategory)]
+        [DisplayName("Color Find Results")]
+        [Description("")]
+        public bool HighlightFindResults { get; set; }
+
         public override void LoadSettingsFromStorage()
         {
             var settings = new Settings();
@@ -50,6 +54,7 @@ namespace BlueOnionSoftware
             ShowElapsedBuildTime = settings.ShowElapsedBuildTime;
             ShowBuildReport = settings.ShowBuildReport;
             ShowDebugWindowOnDebug = settings.ShowDebugWindowOnDebug;
+            HighlightFindResults = settings.HighlightFindResults;
         }
 
         public override void SaveSettingsToStorage()
@@ -60,7 +65,8 @@ namespace BlueOnionSoftware
                 EnableStopOnBuildError = StopOnFirstBuildError,
                 ShowElapsedBuildTime = ShowElapsedBuildTime,
                 ShowBuildReport = ShowBuildReport,
-                ShowDebugWindowOnDebug = ShowDebugWindowOnDebug
+                ShowDebugWindowOnDebug = ShowDebugWindowOnDebug,
+                HighlightFindResults = HighlightFindResults
             };
             settings.Save();
         }
