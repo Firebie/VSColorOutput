@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio;
+
 // ReSharper disable PrivateFieldCanBeConvertedToLocalVariable
 
 #pragma warning disable 649
@@ -44,6 +45,18 @@ namespace BlueOnionSoftware
             }
 
             _projectsBuildReport = new List<string>();
+
+            Settings.SettingsChanged += (sender, args) => LoadSettings();
+            LoadSettings();
+        }
+
+        private void LoadSettings()
+        {
+            var settings = Settings.Load();
+            StopOnBuildErrorEnabled = settings.EnableStopOnBuildError;
+            ShowElapsedBuildTimeEnabled = settings.ShowElapsedBuildTime;
+            ShowBuildReport = settings.ShowBuildReport;
+            ShowDebugWindowOnDebug = settings.ShowDebugWindowOnDebug;
         }
 
         private void OnBuildBegin(vsBuildScope scope, vsBuildAction action)

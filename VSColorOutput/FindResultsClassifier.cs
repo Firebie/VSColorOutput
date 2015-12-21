@@ -24,8 +24,8 @@ namespace BlueOnionSoftware
     private readonly IClassificationTypeRegistryService _classificationRegistry;
     private static readonly Regex FilenameRegex;
 
-    private Regex searchTextFirstLineRegex;
-    private Regex searchTextRegex;
+    private Regex _searchTextFirstLineRegex;
+    private Regex _searchTextRegex;
 
     static FindResultsClassifier()
     {
@@ -35,6 +35,7 @@ namespace BlueOnionSoftware
     public FindResultsClassifier(IClassificationTypeRegistryService classificationRegistry)
     {
       _classificationRegistry = classificationRegistry;
+      Settings.SettingsChanged += (sender, args) => _settingsLoaded = false;
     }
 
     public IList<ClassificationSpan> GetClassificationSpans(SnapshotSpan span)
@@ -51,7 +52,7 @@ namespace BlueOnionSoftware
       var text = span.GetText();
 
       var filenameSpans   = GetMatches(text, FilenameRegex, span.Start, FilenameClassificationType).ToList();
-      var searchTermSpans = GetMatches(text, text.StartsWith(FindAll) ? searchTextFirstLineRegex : searchTextRegex, span.Start, SearchTermClassificationType, text.StartsWith(FindAll)).ToList();
+      var searchTermSpans = GetMatches(text, text.StartsWith(FindAll) ? _searchTextFirstLineRegex : _searchTextRegex, span.Start, SearchTermClassificationType, text.StartsWith(FindAll)).ToList();
 
       var toRemove = (from searchSpan in searchTermSpans
                       from filenameSpan in filenameSpans
@@ -65,11 +66,12 @@ namespace BlueOnionSoftware
 
     private bool CanSearch(SnapshotSpan span)
     {
-      if (span.Start.Position != 0 && searchTextRegex != null)
+      if (span.Start.Position != 0 && _searchTextRegex != null)
+      {
         return true;
-
-      searchTextRegex = null;
-        var firstLine = span.Snapshot.GetLineFromLineNumber(0).GetText();
+      }
+      _searchTextRegex = null;
+      var firstLine = span.Snapshot.GetLineFromLineNumber(0).GetText();
       if (firstLine.StartsWith(FindAll))
       {
         int begin = FindAll.Length;
@@ -92,8 +94,8 @@ namespace BlueOnionSoftware
           //var regex = matchWholeWord ? string.Format(@"\b{0}\b", Regex.Escape(searchTerm)) : Regex.Escape(searchTerm);
           var regex = regularExpressions ? searchTerm : Regex.Escape(searchTerm);
           var casing = matchCase ? RegexOptions.None : RegexOptions.IgnoreCase;
-          searchTextRegex          = new Regex(regex, RegexOptions.None | casing);
-          searchTextFirstLineRegex = new Regex(Regex.Escape(searchTerm), RegexOptions.None | casing);
+          _searchTextRegex          = new Regex(regex, RegexOptions.None | casing);
+          _searchTextFirstLineRegex = new Regex(Regex.Escape(searchTerm), RegexOptions.None | casing);
 
           return true;
         }
@@ -104,19 +106,12 @@ namespace BlueOnionSoftware
     private void LoadSettings()
     {
         if (_settingsLoaded) return;
-        var settings = new Settings();
-        settings.Load();
+            var settings = Settings.Load();
         _highlightFindResults = settings.HighlightFindResults;
         _settingsLoaded = true;
     }
 
-    public void ClearSettings()
-    {
-        _settingsLoaded = false;
-    }
-
-    private static IEnumerable<ClassificationSpan> GetMatches(
-      string text, Regex regex, SnapshotPoint snapStart, IClassificationType classificationType, bool onlyFirst = false)
+    private static IEnumerable<ClassificationSpan> GetMatches(string text, Regex regex, SnapshotPoint snapStart, IClassificationType classificationType, bool onlyFirst = false)
     {
       var list = new List<ClassificationSpan>();
 

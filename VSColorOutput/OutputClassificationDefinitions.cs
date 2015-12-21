@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Windows.Media;
 using Microsoft.VisualStudio.Text.Classification;
@@ -23,6 +24,32 @@ namespace BlueOnionSoftware
         public const string FindResultsSearchTerm = "FindResultsSearchTerm";
         public const string FindResultsFilename = "FindResultsFilename";
 
+        private static Dictionary<ClassificationTypes, Color> _colorMap;
+
+        private static Color GetColor(ClassificationTypes classificationType)
+        {
+            if (_colorMap == null)
+            {
+                var settings = Settings.Load();
+                _colorMap = new Dictionary<ClassificationTypes, Color>
+                {
+                    {ClassificationTypes.BuildHead, settings.BuildMessageColor},
+                    {ClassificationTypes.BuildText, settings.BuildTextColor},
+                    {ClassificationTypes.LogError, settings.ErrorTextColor},
+                    {ClassificationTypes.LogWarning, settings.WarningTextColor},
+                    {ClassificationTypes.LogInformation, settings.InformationTextColor},
+                    {ClassificationTypes.LogCustom1, settings.CustomTextColor1},
+                    {ClassificationTypes.LogCustom2, settings.CustomTextColor2},
+                    {ClassificationTypes.LogCustom3, settings.CustomTextColor3},
+                    {ClassificationTypes.LogCustom4, settings.CustomTextColor4},
+                    {ClassificationTypes.FindFileName, settings.FindFileNameColor},
+                    {ClassificationTypes.FindSearchTerm, settings.FindSearchTermColor}
+                };
+            }
+            Color color;
+            return _colorMap.TryGetValue(classificationType, out color) ? color : Colors.Gray;
+        }
+
         [Export(typeof(ClassificationTypeDefinition))]
         [Name(BuildHead)]
         public static ClassificationTypeDefinition BuildHeaderDefinition { get; set; }
@@ -37,7 +64,7 @@ namespace BlueOnionSoftware
             public BuildHeaderFormat()
             {
                 DisplayName = VsColorOut + "Build Header";
-                ForegroundColor = Colors.Green;
+                ForegroundColor = GetColor(ClassificationTypes.BuildHead);
                 BackgroundOpacity = 0;
             }
         }
@@ -56,7 +83,7 @@ namespace BlueOnionSoftware
             public BuildTextFormat()
             {
                 DisplayName = VsColorOut + "Build Text";
-                ForegroundColor = Colors.Gray;
+                ForegroundColor = GetColor(ClassificationTypes.BuildText);
                 BackgroundOpacity = 0;
             }
         }
@@ -66,7 +93,7 @@ namespace BlueOnionSoftware
         public static ClassificationTypeDefinition LogErrorDefinition { get; set; }
 
         [Name(LogError)]
-        [UserVisible(true)]
+        [UserVisible(false)]
         [Export(typeof(EditorFormatDefinition))]
         [ClassificationType(ClassificationTypeNames = LogError)]
         [Order(Before = Priority.Default)]
@@ -75,7 +102,7 @@ namespace BlueOnionSoftware
             public LogErrorFormat()
             {
                 DisplayName = VsColorOut + "Log Error";
-                ForegroundColor = Colors.Red;
+                ForegroundColor = GetColor(ClassificationTypes.LogError);
                 BackgroundOpacity = 0;
             }
         }
@@ -85,7 +112,7 @@ namespace BlueOnionSoftware
         public static ClassificationTypeDefinition LogWarningDefinition { get; set; }
 
         [Name(LogWarn)]
-        [UserVisible(true)]
+        [UserVisible(false)]
         [Export(typeof(EditorFormatDefinition))]
         [ClassificationType(ClassificationTypeNames = LogWarn)]
         [Order(Before = Priority.Default)]
@@ -94,7 +121,7 @@ namespace BlueOnionSoftware
             public LogWarningFormat()
             {
                 DisplayName = VsColorOut + "Log Warning";
-                ForegroundColor = Colors.Olive;
+                ForegroundColor = GetColor(ClassificationTypes.LogWarning);
                 BackgroundOpacity = 0;
             }
         }
@@ -104,7 +131,7 @@ namespace BlueOnionSoftware
         public static ClassificationTypeDefinition LogInformationDefinition { get; set; }
 
         [Name(LogInfo)]
-        [UserVisible(true)]
+        [UserVisible(false)]
         [Export(typeof(EditorFormatDefinition))]
         [ClassificationType(ClassificationTypeNames = LogInfo)]
         [Order(Before = Priority.Default)]
@@ -113,7 +140,7 @@ namespace BlueOnionSoftware
             public LogInformationFormat()
             {
                 DisplayName = VsColorOut + "Log Information";
-                ForegroundColor = Colors.DarkBlue;
+                ForegroundColor = GetColor(ClassificationTypes.LogInformation);
                 BackgroundOpacity = 0;
             }
         }
@@ -123,7 +150,7 @@ namespace BlueOnionSoftware
         public static ClassificationTypeDefinition LogCustome1Definition { get; set; }
 
         [Name(LogCustom1)]
-        [UserVisible(true)]
+        [UserVisible(false)]
         [Export(typeof(EditorFormatDefinition))]
         [ClassificationType(ClassificationTypeNames = LogCustom1)]
         [Order(Before = Priority.Default)]
@@ -132,7 +159,7 @@ namespace BlueOnionSoftware
             public LogCustom1Format()
             {
                 DisplayName = VsColorOut + "Log Custom1";
-                ForegroundColor = Colors.Purple;
+                ForegroundColor = GetColor(ClassificationTypes.LogCustom1);
                 BackgroundOpacity = 0;
             }
         }
@@ -142,7 +169,7 @@ namespace BlueOnionSoftware
         public static ClassificationTypeDefinition LogCustom2Definition { get; set; }
 
         [Name(LogCustom2)]
-        [UserVisible(true)]
+        [UserVisible(false)]
         [Export(typeof(EditorFormatDefinition))]
         [ClassificationType(ClassificationTypeNames = LogCustom2)]
         [Order(Before = Priority.Default)]
@@ -151,7 +178,7 @@ namespace BlueOnionSoftware
             public LogCustom2Format()
             {
                 DisplayName = VsColorOut + "Log Custom2";
-                ForegroundColor = Colors.DarkSalmon;
+                ForegroundColor = GetColor(ClassificationTypes.LogCustom2);
                 BackgroundOpacity = 0;
             }
         }
@@ -161,7 +188,7 @@ namespace BlueOnionSoftware
         public static ClassificationTypeDefinition LogCustom3Definition { get; set; }
 
         [Name(LogCustom3)]
-        [UserVisible(true)]
+        [UserVisible(false)]
         [Export(typeof(EditorFormatDefinition))]
         [ClassificationType(ClassificationTypeNames = LogCustom3)]
         [Order(Before = Priority.Default)]
@@ -170,7 +197,7 @@ namespace BlueOnionSoftware
             public LogCustom3Format()
             {
                 DisplayName = VsColorOut + "Log Custom3";
-                ForegroundColor = Colors.DarkOrange;
+                ForegroundColor = GetColor(ClassificationTypes.LogCustom3);
                 BackgroundOpacity = 0;
             }
         }
@@ -180,7 +207,7 @@ namespace BlueOnionSoftware
         public static ClassificationTypeDefinition LogCustom4Definition { get; set; }
 
         [Name(LogCustom4)]
-        [UserVisible(true)]
+        [UserVisible(false)]
         [Export(typeof(EditorFormatDefinition))]
         [ClassificationType(ClassificationTypeNames = LogCustom4)]
         [Order(Before = Priority.Default)]
@@ -189,7 +216,7 @@ namespace BlueOnionSoftware
             public LogCustom4Format()
             {
                 DisplayName = VsColorOut + "Log Custom4";
-                ForegroundColor = Colors.Brown;
+                ForegroundColor = GetColor(ClassificationTypes.LogCustom4);
                 BackgroundOpacity = 0;
             }
         }
@@ -199,7 +226,7 @@ namespace BlueOnionSoftware
         public static ClassificationTypeDefinition FindResultsSearchTermDefinition { get; set; }
 
         [Name(FindResultsSearchTerm)]
-        [UserVisible(true)]
+        [UserVisible(false)]
         [Export(typeof(EditorFormatDefinition))]
         [ClassificationType(ClassificationTypeNames = FindResultsSearchTerm)]
         [Order(Before = Priority.Default)]
@@ -208,8 +235,7 @@ namespace BlueOnionSoftware
             public FindResultsSearchTermFormat()
             {
                 DisplayName = VsColorOut + "Find Results Search Term";
-                //ForegroundColor = Colors.Blue;
-                ForegroundColor = Colors.Green;
+                ForegroundColor = GetColor(ClassificationTypes.FindSearchTerm);
                 BackgroundOpacity = 0;
             }
         }
@@ -219,7 +245,7 @@ namespace BlueOnionSoftware
         public static ClassificationTypeDefinition FindFilenameDefinition { get; set; }
 
         [Name(FindResultsFilename)]
-        [UserVisible(true)]
+        [UserVisible(false)]
         [Export(typeof(EditorFormatDefinition))]
         [ClassificationType(ClassificationTypeNames = FindResultsFilename)]
         [Order(Before = Priority.Default)]
@@ -228,7 +254,7 @@ namespace BlueOnionSoftware
             public FindResultsFilenameFormat()
             {
                 DisplayName = VsColorOut + "Find Results Filename";
-                ForegroundColor = Colors.DarkGray;//Colors.Gray;
+                ForegroundColor = GetColor(ClassificationTypes.FindFileName);
 								BackgroundOpacity = 0;
             }
         }
