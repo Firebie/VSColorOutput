@@ -20,12 +20,13 @@ namespace BlueOnionSoftware
     private const string FindResults = "Find Results";
 
     private bool _settingsLoaded;
-    private bool _highlightFindResults;
     private readonly IClassificationTypeRegistryService _classificationRegistry;
     private static readonly Regex FilenameRegex;
 
     private Regex _searchTextFirstLineRegex;
     private Regex _searchTextRegex;
+
+    public bool HighlightFindResults { get; set; }
 
     static FindResultsClassifier()
     {
@@ -44,7 +45,7 @@ namespace BlueOnionSoftware
       var classifications = new List<ClassificationSpan>();
 
       var snapshot = span.Snapshot;
-      if (snapshot == null || snapshot.Length == 0 || !CanSearch(span) || !_highlightFindResults)
+      if (snapshot == null || snapshot.Length == 0 || !CanSearch(span) || !HighlightFindResults)
       {
         return classifications;
       }
@@ -106,8 +107,8 @@ namespace BlueOnionSoftware
     private void LoadSettings()
     {
         if (_settingsLoaded) return;
-            var settings = Settings.Load();
-        _highlightFindResults = settings.HighlightFindResults;
+        var settings = Settings.Load();
+        HighlightFindResults = settings.HighlightFindResults;
         _settingsLoaded = true;
     }
 
